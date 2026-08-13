@@ -1,0 +1,256 @@
+@import 'tailwindcss';
+
+/* Design tokens — lifted verbatim from the handoff README's token table. */
+@theme {
+  --color-ink: #16181a;
+  --color-ink-deep: #1b1e20;
+  --color-jade: #186a57;
+  --color-jade-dark: #12564a;
+  --color-jade-light: #2ea184;
+  --color-jade-pale: #4fb79a;
+  --color-surface: #f7f8f8;
+  --color-tint: #eceff0;
+  --color-line: #e6e8ea;
+  --color-rule: #f1f3f4;
+  --color-body: #3d4247;
+  --color-body-soft: #5c6268;
+  --color-muted: #7a8085;
+  --color-muted-light: #9ba1a6;
+  --color-ondark: #c9cdd1;
+  --color-ondark-soft: #a7adb3;
+  --color-ondark-faint: #8c9298;
+  --color-mint: #eaf2ef;
+  --color-mint-line: #cfe2db;
+
+  --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --shadow-rest: 0 1px 2px rgb(22 24 26 / 0.04);
+  --shadow-lift: 0 18px 40px rgb(22 24 26 / 0.12);
+  --shadow-media: 0 20px 44px rgb(22 24 26 / 0.1);
+  --shadow-panel: 0 20px 50px rgb(22 24 26 / 0.35);
+  --shadow-arrow: 0 10px 26px rgb(22 24 26 / 0.16);
+  --shadow-header: 0 1px 0 rgb(22 24 26 / 0.08), 0 8px 24px rgb(22 24 26 / 0.06);
+
+  --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    line-height: 1.15;
+  }
+
+  /* Focus ring spec'd in the handoff: jade border + 3px jade halo. */
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-jade);
+    box-shadow: 0 0 0 3px rgb(24 106 87 / 0.16);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-jade);
+    outline-offset: 2px;
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+@layer components {
+  /* Jade chevron for every <select>. Lives here rather than in a Tailwind arbitrary
+     value: the data URI needs both quote styles, which the class-name escaper mangles
+     into an invalid url() token. */
+  .select-field {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='8'%20viewBox='0%200%2012%208'%3E%3Cpath%20d='M1.5%201.75%206%206.25%2010.5%201.75'%20fill='none'%20stroke='%23186A57'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px 8px;
+  }
+
+  /* Reveal-on-scroll: hidden until the observer adds .is-in. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 600ms var(--ease-std),
+      transform 600ms var(--ease-std);
+  }
+
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Hero flight loop (FlightMap.tsx) ─────────────────────────────────────────
+   One 20s cycle shared by every element, so they stay in step forever:
+   0–40% outbound, 40–60% on the ground (cities ping), 60–100% flight home. */
+
+@keyframes fm-fly {
+  0% {
+    offset-distance: 0%;
+    offset-rotate: auto 0deg;
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  37% {
+    opacity: 1;
+  }
+  40% {
+    offset-distance: 100%;
+    offset-rotate: auto 0deg;
+    opacity: 0;
+  }
+  60% {
+    offset-distance: 100%;
+    offset-rotate: auto 180deg;
+    opacity: 0;
+  }
+  63% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 0%;
+    offset-rotate: auto 180deg;
+    opacity: 0;
+  }
+}
+
+@keyframes fm-trail {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  40%,
+  95% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fm-city {
+  0%,
+  36% {
+    opacity: 0.3;
+  }
+  42%,
+  60% {
+    opacity: 1;
+  }
+  72%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes fm-ring {
+  0%,
+  36% {
+    transform: scale(0.35);
+    opacity: 0;
+  }
+  44% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  60%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.fm-plane {
+  offset-anchor: center;
+  animation: fm-fly 20s linear infinite;
+}
+
+.fm-trail {
+  animation: fm-trail 20s linear infinite;
+}
+
+.fm-city {
+  opacity: 0.3;
+  animation: fm-city 20s linear infinite;
+}
+
+.fm-ring {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fm-ring 20s linear infinite;
+  animation-delay: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Freeze the map in a deliberate resting state rather than mid-keyframe. */
+  .fm-plane {
+    opacity: 0;
+  }
+
+  .fm-trail {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  .fm-city {
+    opacity: 1;
+  }
+
+  .fm-ring {
+    opacity: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
