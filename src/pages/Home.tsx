@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom'
 import ImageSlot from '../components/ImageSlot'
-import { Bullet, Eyebrow } from '../components/ui'
+// `Bullet` comes back with the ambassador section below.
+import { Eyebrow } from '../components/ui'
 import Hero from '../sections/Hero'
 import StatsBar from '../sections/StatsBar'
 import HospitalCarousel from '../sections/HospitalCarousel'
 import Testimonials from '../sections/Testimonials'
 import Faq from '../sections/Faq'
 import EnquiryForm from '../sections/EnquiryForm'
-import { AMBASSADOR, DESTINATIONS, INFRA, JOURNEY, SPECIALTIES, WHY_CARDS } from '../data/site'
+// `AMBASSADOR` comes back with the ambassador section below.
+import { DESTINATIONS, INFRA, JOURNEY, SPECIALTIES, WHY_CARDS } from '../data/site'
 import { useParallax } from '../lib/motion'
 
 export default function Home() {
@@ -203,7 +205,11 @@ export default function Home() {
 
       <Testimonials />
 
-      {/* Meet your ambassador */}
+      {/* Meet your ambassador — parked, may come back.
+          To restore: uncomment this block and re-add `Bullet` to the ui import and
+          `AMBASSADOR` to the site import at the top of this file. The copy, the photo
+          slot (`ambassador`) and the generated portrait are all still in place.
+
       <section id="about" className="bg-tint px-6 py-24">
         <div className="shell grid items-center gap-14 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
           <div className="reveal relative h-[440px] overflow-hidden rounded-2xl bg-[#E6E9EA] shadow-media">
@@ -230,6 +236,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      */}
 
       <Faq />
       <EnquiryForm />
