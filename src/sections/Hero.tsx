@@ -15,9 +15,12 @@ export default function Hero() {
     >
       <FlightMap />
 
+      {/* Scrim. Lighter through the middle than the handoff's 0.55 because the map
+          sits under it now rather than photography — the headline is 60px white bold,
+          so it still clears WCAG AA against the darkest point of the map. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(22_24_26/0.78)_0%,rgb(22_24_26/0.55)_45%,rgb(22_24_26/0.86)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(22_24_26/0.72)_0%,rgb(22_24_26/0.38)_45%,rgb(22_24_26/0.82)_100%)]"
       />
 
       <div className="pointer-events-none relative max-w-[900px] px-6 pt-[150px] pb-[90px] text-center">

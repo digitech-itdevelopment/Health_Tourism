@@ -53,9 +53,13 @@ grok --prompt-file <batch>.txt --cwd . --always-approve
   was inconsistent — mostly "Health Tourism", but "Arogya Bridge" in the consent copy
   and in the design project name. Arogya Bridge won.
 - **The hero is not a video.** It is an SVG + CSS motion-path loop (`FlightMap.tsx`):
-  Sydney → India, partner cities light up, flight home, 20s seamless cycle. A few KB,
-  sharp at any size, no decode cost. The landmasses are hand-simplified, not survey
-  data — swap in TopoJSON if real geography ever matters.
+  Sydney → India, the six partner cities light up, hub links fan out, then the flight
+  home. One 20s cycle, seamless by construction, ~8 KB, sharp at any size, no decode.
+- **The hero map geometry is generated, not drawn.** Coastlines, graticule, the
+  great-circle route and the projected city positions all come from Natural Earth via
+  `scripts/gen-map-geometry.mjs`, which writes `src/components/flight-map.geo.ts`.
+  Never edit that file — change the script and re-run `node scripts/gen-map-geometry.mjs`.
+  d3-geo and world-atlas are devDependencies; only the path strings ship.
 - **All motion honours `prefers-reduced-motion`**, including the hero, which freezes
   into a deliberate resting state rather than mid-keyframe.
 - **The enquiry form goes nowhere.** It is a prototype form and says so on screen.

@@ -196,6 +196,73 @@
   }
 }
 
+/* Light lifts over India while the aircraft is on the ground there. */
+@keyframes fm-bloom {
+  0%,
+  30% {
+    opacity: 0.15;
+  }
+  44%,
+  58% {
+    opacity: 1;
+  }
+  76%,
+  100% {
+    opacity: 0.15;
+  }
+}
+
+/* Hub-to-city legs draw in on arrival and retract before the flight home. */
+@keyframes fm-network {
+  0%,
+  42% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.55;
+  }
+  56% {
+    stroke-dashoffset: 0;
+    opacity: 0.55;
+  }
+  64%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fm-leg-out {
+  0%,
+  2% {
+    opacity: 0;
+  }
+  8%,
+  36% {
+    opacity: 0.9;
+  }
+  42%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fm-leg-back {
+  0%,
+  60% {
+    opacity: 0;
+  }
+  66%,
+  92% {
+    opacity: 0.9;
+  }
+  98%,
+  100% {
+    opacity: 0;
+  }
+}
+
 .fm-plane {
   /* fill-box so `center` means the glyph's own centre, not the viewBox centre. */
   transform-box: fill-box;
@@ -221,6 +288,26 @@
   animation-delay: inherit;
 }
 
+.fm-bloom {
+  opacity: 0.15;
+  animation: fm-bloom 20s linear infinite;
+}
+
+.fm-network {
+  opacity: 0;
+  animation: fm-network 20s linear infinite;
+}
+
+.fm-leg-out {
+  opacity: 0;
+  animation: fm-leg-out 20s linear infinite;
+}
+
+.fm-leg-back {
+  opacity: 0;
+  animation: fm-leg-back 20s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -241,6 +328,23 @@
   }
 
   .fm-ring {
+    opacity: 0;
+  }
+
+  .fm-bloom {
+    opacity: 0.5;
+  }
+
+  .fm-network {
+    stroke-dashoffset: 0;
+    opacity: 0.4;
+  }
+
+  .fm-leg-out {
+    opacity: 0.9;
+  }
+
+  .fm-leg-back {
     opacity: 0;
   }
 
