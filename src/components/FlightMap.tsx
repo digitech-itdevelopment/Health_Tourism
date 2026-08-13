@@ -5,21 +5,24 @@ import {
   INDIA_CITIES,
   INDIA_PATH,
   NETWORK_PATH,
-  ROUTE_KM,
-  ROUTE_PATH,
+  ROUTES,
   SRI_LANKA_PATH,
   VIEW_BOX,
 } from './flight-map.geo'
 
-// Hero background: Sydney → India, the six partner cities light up, then the flight
-// home. One 20s CSS loop, seamless by construction.
+// Hero background: three inbound flights in turn — Sydney, then Melbourne, then Perth —
+// each landing in Delhi, lighting the partner cities, and flying home.
 //
-// SVG + CSS (motion path + keyframes), not video: ~8 KB instead of several MB, sharp at
+// SVG + CSS (motion path + keyframes), not video: ~11 KB instead of several MB, sharp at
 // any viewport, no decode, and the compositor does all the work.
 //
-// Coastlines, graticule and the great-circle route all come from Natural Earth via
-// scripts/gen-map-geometry.mjs — nothing here is drawn by hand. To change the framing
-// or the cities, edit that script and re-run it; never edit flight-map.geo.ts.
+// Timing is two nested cycles: a 16s leg (out, dwell, home) that everything on the
+// ground follows, inside a 48s master that hands the leg to each departure city in turn.
+//
+// Coastlines, graticule, the great circles and the projected city positions all come
+// from Natural Earth via scripts/gen-map-geometry.mjs — nothing here is drawn by hand.
+// To change framing, cities or routes, edit that script and re-run it. Never edit
+// flight-map.geo.ts.
 
 const label = (city: { x: number; y: number; side: string; dy: number }) =>
   city.side === 'right'
@@ -49,8 +52,8 @@ export default function FlightMap() {
       <rect width="1200" height="675" fill="#16181A" />
       <path d={GRATICULE_PATH} fill="none" stroke="#2EA184" strokeWidth="0.6" strokeOpacity="0.18" />
 
-      {/* Bloom over India, timed to the arrival */}
-      <ellipse cx="385" cy="165" rx="225" ry="200" fill="url(#fm-bloom)" className="fm-bloom" />
+      {/* Bloom over India, timed to each arrival */}
+      <ellipse cx="385" cy="210" rx="225" ry="200" fill="url(#fm-bloom)" className="fm-bloom" />
 
       {/* Coastlines. The wide, low-opacity stroke underneath is a cheap glow — far
           lighter than an SVG filter, which would rasterise every frame. */}
@@ -64,7 +67,8 @@ export default function FlightMap() {
         <path d={AUSTRALIA_PATH} fill="#2EA184" fillOpacity="0.15" strokeWidth="1.7" strokeOpacity="0.75" />
       </g>
 
-      {/* Onward legs from the arrival hub, drawn once the aircraft is on the ground */}
+      {/* Onward legs from the arrival hub. Partner cities only — the map never implies
+          a facility we do not list. */}
       <path
         d={NETWORK_PATH}
         pathLength={1}
@@ -75,18 +79,33 @@ export default function FlightMap() {
         className="fm-network"
       />
 
-      {/* Route: faint always, bright segment drawn on the outbound leg */}
-      <path d={ROUTE_PATH} fill="none" stroke="#4FB79A" strokeWidth="1.2" strokeOpacity="0.35" strokeDasharray="4 7" />
-      <path
-        d={ROUTE_PATH}
-        pathLength={1}
-        fill="none"
-        stroke="#7FD8BE"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeDasharray="1"
-        className="fm-trail"
-      />
+      {/* All three routes sit faint the whole time, so the map reads as a network even
+          between flights. Only the leg being flown gets the bright overlay. */}
+      {ROUTES.map((r) => (
+        <path
+          key={`base-${r.code}`}
+          d={r.path}
+          fill="none"
+          stroke="#4FB79A"
+          strokeWidth="1.2"
+          strokeOpacity="0.28"
+          strokeDasharray="4 7"
+        />
+      ))}
+
+      {ROUTES.map((r, i) => (
+        <path
+          key={`trail-${r.code}`}
+          d={r.path}
+          pathLength={1}
+          fill="none"
+          stroke="#7FD8BE"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray="1"
+          className={`fm-trail fm-band-${i + 1}`}
+        />
+      ))}
 
       {/* Departure cities */}
       {AU_CITIES.map((c) => {
@@ -109,11 +128,11 @@ export default function FlightMap() {
         )
       })}
 
-      {/* Partner cities — ping in sequence while the aircraft is on the ground */}
+      {/* Indian destinations — ping in sequence while the aircraft is on the ground */}
       {INDIA_CITIES.map((c, i) => {
         const l = label(c)
         return (
-          <g key={c.name} className="fm-city" style={{ animationDelay: `${i * 0.4}s` }}>
+          <g key={c.name} className="fm-city" style={{ animationDelay: `${i * 0.35}s` }}>
             <circle cx={c.x} cy={c.y} r="12" fill="none" stroke="#4FB79A" strokeWidth="1.1" className="fm-ring" />
             <circle cx={c.x} cy={c.y} r="3" fill="#7FD8BE" />
             <text
@@ -131,24 +150,30 @@ export default function FlightMap() {
         )
       })}
 
-      {/* Aircraft. The glyph noses along +x so `offset-rotate: auto` points it the way
-          it is travelling; the glow rides the same path. */}
-      <g className="fm-plane" style={{ offsetPath: `path('${ROUTE_PATH}')` }}>
-        <circle r="16" fill="url(#fm-engine)" />
-        <path
-          d="M9 0 L1.6 2.4 L-1.4 9 L-3 9 L-1.9 2.2 L-6.2 1.4 L-7.6 3.6 L-8.8 3.6 L-8 0 L-8.8 -3.6 L-7.6 -3.6 L-6.2 -1.4 L-1.9 -2.2 L-3 -9 L-1.4 -9 L1.6 -2.4 Z"
-          fill="#F7F8F8"
-        />
-      </g>
+      {/* Aircraft, one per route. The glyph noses along +x so `offset-rotate: auto`
+          points it the way it is travelling; the glow rides the same path. */}
+      {ROUTES.map((r, i) => (
+        <g
+          key={`plane-${r.code}`}
+          className={`fm-plane fm-slot-${i + 1}`}
+          style={{ offsetPath: `path('${r.path}')` }}
+        >
+          <circle r="16" fill="url(#fm-engine)" />
+          <path
+            d="M9 0 L1.6 2.4 L-1.4 9 L-3 9 L-1.9 2.2 L-6.2 1.4 L-7.6 3.6 L-8.8 3.6 L-8 0 L-8.8 -3.6 L-7.6 -3.6 L-6.2 -1.4 L-1.9 -2.2 L-3 -9 L-1.4 -9 L1.6 -2.4 Z"
+            fill="#F7F8F8"
+          />
+        </g>
+      ))}
 
-      {/* Leg readout, bottom left */}
-      <g fontFamily="ui-monospace, monospace" letterSpacing="0.16em" fontSize="11.5">
-        <text x="62" y="628" fill="#7FD8BE" className="fm-leg-out">
-          SYD → DEL · {ROUTE_KM.toLocaleString('en-AU')} KM · NONSTOP
-        </text>
-        <text x="62" y="628" fill="#7FD8BE" className="fm-leg-back">
-          DEL → SYD · CLEARED TO FLY HOME
-        </text>
+      {/* Leg readout, bottom left. Direction-neutral because it stays up for the whole
+          leg, including the flight home. */}
+      <g fontFamily="ui-monospace, monospace" letterSpacing="0.16em" fontSize="11.5" fill="#7FD8BE">
+        {ROUTES.map((r, i) => (
+          <text key={`leg-${r.code}`} x="62" y="640" className={`fm-leg fm-band-${i + 1}`}>
+            {r.code} – DEL · {r.km.toLocaleString('en-AU')} KM · NONSTOP
+          </text>
+        ))}
       </g>
     </svg>
   )

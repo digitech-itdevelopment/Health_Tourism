@@ -110,56 +110,156 @@
 }
 
 /* ── Hero flight loop (FlightMap.tsx) ─────────────────────────────────────────
-   One 20s cycle shared by every element, so they stay in step forever:
-   0–40% outbound, 40–60% on the ground (cities ping), 60–100% flight home. */
+   Two nested cycles.
 
+   The 16s LEG is one out-and-back: 0-40% outbound, 40-62% on the ground (cities
+   ping, hub links draw), 62-100% flight home. Everything on the ground runs on
+   this cycle, so it repeats identically for every departure city.
+
+   The 48s MASTER hands that leg to Sydney, then Melbourne, then Perth. Only the
+   opacity slots are on the master; movement stays on the leg. That way three
+   aircraft can share one movement keyframe set and only differ in when they show.
+
+   Percentages are the leg position scaled into each third of the master:
+   leg 1 = 0-33.3%, leg 2 = 33.3-66.7%, leg 3 = 66.7-100%. */
+
+/* Movement only. Opacity belongs to the slot, or the two animations would fight. */
 @keyframes fm-fly {
   0% {
     offset-distance: 0%;
     offset-rotate: auto 0deg;
-    opacity: 0;
-  }
-  3% {
-    opacity: 1;
-  }
-  37% {
-    opacity: 1;
   }
   40% {
     offset-distance: 100%;
     offset-rotate: auto 0deg;
-    opacity: 0;
   }
-  60% {
+  62% {
     offset-distance: 100%;
     offset-rotate: auto 180deg;
-    opacity: 0;
-  }
-  63% {
-    opacity: 1;
-  }
-  97% {
-    opacity: 1;
   }
   100% {
     offset-distance: 0%;
     offset-rotate: auto 180deg;
-    opacity: 0;
   }
 }
 
 @keyframes fm-trail {
   0% {
     stroke-dashoffset: 1;
-    opacity: 1;
   }
   40%,
-  95% {
+  100% {
     stroke-dashoffset: 0;
+  }
+}
+
+/* Aircraft slots: visible while flying, hidden on the ground and between legs.
+   The gap over the dwell also hides the 180deg turn. */
+@keyframes fm-slot-1 {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  1%,
+  12.5% {
+    opacity: 1;
+  }
+  13.5%,
+  21% {
+    opacity: 0;
+  }
+  22%,
+  32.5% {
+    opacity: 1;
+  }
+  33.5% {
+    opacity: 0;
+  }
+}
+
+@keyframes fm-slot-2 {
+  0%,
+  33.5%,
+  100% {
+    opacity: 0;
+  }
+  34.5%,
+  46% {
+    opacity: 1;
+  }
+  47%,
+  54.5% {
+    opacity: 0;
+  }
+  55.5%,
+  66% {
+    opacity: 1;
+  }
+  67% {
+    opacity: 0;
+  }
+}
+
+@keyframes fm-slot-3 {
+  0%,
+  67%,
+  100% {
+    opacity: 0;
+  }
+  68%,
+  79.5% {
+    opacity: 1;
+  }
+  80.5%,
+  88% {
+    opacity: 0;
+  }
+  89%,
+  99.5% {
+    opacity: 1;
+  }
+}
+
+/* Band slots: up for a whole leg, used by that leg's trail and readout. */
+@keyframes fm-band-1 {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  1%,
+  32% {
+    opacity: 1;
+  }
+  33.3% {
+    opacity: 0;
+  }
+}
+
+@keyframes fm-band-2 {
+  0%,
+  33.3%,
+  100% {
+    opacity: 0;
+  }
+  34.5%,
+  65.5% {
+    opacity: 1;
+  }
+  66.7% {
+    opacity: 0;
+  }
+}
+
+@keyframes fm-band-3 {
+  0%,
+  66.7% {
+    opacity: 0;
+  }
+  68%,
+  99% {
     opacity: 1;
   }
   100% {
-    stroke-dashoffset: 0;
     opacity: 0;
   }
 }
@@ -233,79 +333,96 @@
   }
 }
 
-@keyframes fm-leg-out {
-  0%,
-  2% {
-    opacity: 0;
-  }
-  8%,
-  36% {
-    opacity: 0.9;
-  }
-  42%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes fm-leg-back {
-  0%,
-  60% {
-    opacity: 0;
-  }
-  66%,
-  92% {
-    opacity: 0.9;
-  }
-  98%,
-  100% {
-    opacity: 0;
-  }
-}
-
-.fm-plane {
-  /* fill-box so `center` means the glyph's own centre, not the viewBox centre. */
-  transform-box: fill-box;
-  transform-origin: center;
-  offset-anchor: center;
-  animation: fm-fly 20s linear infinite;
-}
-
-.fm-trail {
-  animation: fm-trail 20s linear infinite;
-}
-
+/* Everything on the ground repeats every leg. */
 .fm-city {
   opacity: 0.3;
-  animation: fm-city 20s linear infinite;
+  animation: fm-city 16s linear infinite;
 }
 
 .fm-ring {
   opacity: 0;
   transform-box: fill-box;
   transform-origin: center;
-  animation: fm-ring 20s linear infinite;
+  animation: fm-ring 16s linear infinite;
   animation-delay: inherit;
 }
 
 .fm-bloom {
   opacity: 0.15;
-  animation: fm-bloom 20s linear infinite;
+  animation: fm-bloom 16s linear infinite;
 }
 
 .fm-network {
   opacity: 0;
-  animation: fm-network 20s linear infinite;
+  animation: fm-network 16s linear infinite;
 }
 
-.fm-leg-out {
+/* Aircraft and trails move on the leg and appear on the master. Two animations per
+   element, each owning different properties, so they never fight. */
+.fm-plane {
+  /* fill-box so `center` means the glyph's own centre, not the viewBox centre. */
+  transform-box: fill-box;
+  transform-origin: center;
+  offset-anchor: center;
   opacity: 0;
-  animation: fm-leg-out 20s linear infinite;
+  animation: fm-fly 16s linear infinite;
 }
 
-.fm-leg-back {
+.fm-trail,
+.fm-leg {
   opacity: 0;
-  animation: fm-leg-back 20s linear infinite;
+}
+
+.fm-trail {
+  animation: fm-trail 16s linear infinite;
+}
+
+.fm-plane.fm-slot-1 {
+  animation:
+    fm-fly 16s linear infinite,
+    fm-slot-1 48s linear infinite;
+}
+
+.fm-plane.fm-slot-2 {
+  animation:
+    fm-fly 16s linear infinite,
+    fm-slot-2 48s linear infinite;
+}
+
+.fm-plane.fm-slot-3 {
+  animation:
+    fm-fly 16s linear infinite,
+    fm-slot-3 48s linear infinite;
+}
+
+.fm-trail.fm-band-1 {
+  animation:
+    fm-trail 16s linear infinite,
+    fm-band-1 48s linear infinite;
+}
+
+.fm-trail.fm-band-2 {
+  animation:
+    fm-trail 16s linear infinite,
+    fm-band-2 48s linear infinite;
+}
+
+.fm-trail.fm-band-3 {
+  animation:
+    fm-trail 16s linear infinite,
+    fm-band-3 48s linear infinite;
+}
+
+.fm-leg.fm-band-1 {
+  animation: fm-band-1 48s linear infinite;
+}
+
+.fm-leg.fm-band-2 {
+  animation: fm-band-2 48s linear infinite;
+}
+
+.fm-leg.fm-band-3 {
+  animation: fm-band-3 48s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -338,6 +455,15 @@
   .fm-network {
     stroke-dashoffset: 0;
     opacity: 0.4;
+  }
+
+  /* All three readouts share one position, so only the first may show. */
+  .fm-leg {
+    opacity: 0;
+  }
+
+  .fm-leg.fm-band-1 {
+    opacity: 0.9;
   }
 
   .fm-leg-out {
