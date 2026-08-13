@@ -9,7 +9,6 @@ import HospitalProfile from './pages/HospitalProfile'
 import Treatment from './pages/Treatment'
 import WhyIndia from './pages/WhyIndia'
 import Journey from './pages/Journey'
-import About from './pages/About'
 import NotFound from './pages/NotFound'
 
 function Layout() {
@@ -40,7 +39,6 @@ export default function App() {
         <Route path="treatments/knee-replacement" element={<Treatment />} />
         <Route path="why-india" element={<WhyIndia />} />
         <Route path="your-journey" element={<Journey />} />
-        <Route path="about" element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

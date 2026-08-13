@@ -424,34 +424,6 @@ export const DOCS = [
   'Travel insurance details and next-of-kin contact',
 ]
 
-// ─── About ────────────────────────────────────────────────────────────────────
-
-export const ABOUT_STORY = [
-  `${BRAND_NAME} began in 2019 after our founder spent fourteen months on a public list for a knee that had already stopped her working. The private quote she was given at home was more than the car in her driveway. She went to Chennai on a friend's recommendation, and came back with the strong impression that the hard part was not the surgery but the arranging.`,
-  'There was no single person to ask, no way to compare one hospital against another on the same terms, and no one in Australia to call once she was home. We built the company around those three gaps, in that order.',
-  'Today we work with six partner hospitals in six cities. That number stays deliberately small: we visit each one, we know the international patient officers by name, and we would rather turn an enquiry away than place someone somewhere we have not seen.',
-]
-
-export const ABOUT_FACTS = [
-  { v: '2019', k: 'Founded' },
-  { v: '6', k: 'Partner hospitals' },
-  { v: '7', k: 'Staff, Sydney and Chennai' },
-  { v: '100%', k: 'Facilities visited in person' },
-]
-
-export const TEAM = [
-  { id: 'team-1', name: 'Priya Raghavan', role: 'Founder & ambassador', bio: 'Twelve years in hospital international patient services in Delhi and Chennai before founding the company.' },
-  { id: 'team-2', name: 'Daniel Okafor', role: 'Head of case coordination', bio: 'Runs the Sydney desk. Former private hospital admissions manager. Your first call when plans change.' },
-  { id: 'team-3', name: 'Meera Shah', role: 'Hospital partnerships', bio: 'Based in Chennai. Handles site visits, documentation renewals and pricing scope agreements.' },
-  { id: 'team-4', name: 'Tom Brennan', role: 'Travel & logistics', bio: 'Visas, flights, transfers and recovery accommodation, including companion arrangements.' },
-]
-
-export const ABOUT_PRINCIPLES = [
-  { title: 'How we are paid', body: 'Partner hospitals pay us a facilitation fee that is disclosed in your quote. You are not charged for an enquiry, a records review or a quote, and the fee does not change with the procedure you choose.' },
-  { title: 'What we are not', body: 'We are not a hospital, an insurer or a medical practice. We hold no clinical role and give no medical advice.' },
-  { title: 'When we say no', body: 'If your case is better managed at home, or a partner cannot take it safely, we say so and stop. We would rather lose the booking.' },
-]
-
 // ─── Footer ───────────────────────────────────────────────────────────────────
 
 export const SOCIALS = [

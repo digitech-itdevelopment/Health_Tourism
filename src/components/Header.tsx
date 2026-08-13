@@ -8,7 +8,6 @@ const LINKS = [
   { to: '/treatments/knee-replacement', label: 'Treatments', secondary: false },
   { to: '/why-india', label: 'Why India', secondary: true },
   { to: '/your-journey', label: 'Your Journey', secondary: true },
-  { to: '/about', label: 'About', secondary: true },
 ]
 
 export default function Header() {

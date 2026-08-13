@@ -75,22 +75,17 @@ export const IMAGES: ImageSpec[] = [
   { id: 'dest-rajasthan', alt: 'Recovery accommodation in Rajasthan', prompt: 'A serviced heritage courtyard stay in Rajasthan, sandstone arches, shaded seating, flat paved terrain, warm late light.', ar: '3:4' },
   { id: 'dest-rishikesh', alt: 'Recovery accommodation in Rishikesh', prompt: 'A quiet riverside guesthouse terrace above the Ganges at Rishikesh, forested hills, still early morning, no people.', ar: '3:4' },
 
-  // ── Portraits (6) ──
+  // ── Portraits (2) ──
   { id: 'story-portrait', alt: 'Portrait of a patient', prompt: 'A relaxed portrait of an Australian man in his sixties seated by a window at home, gentle natural light, warm and candid.', ar: '1:1' },
   { id: 'ambassador', alt: 'Portrait of Priya Raghavan, ambassador', prompt: 'A professional portrait of an Indian-Australian woman in her forties in a bright office, business dress, confident and approachable.', ar: '3:4' },
-  { id: 'team-1', alt: 'Portrait of Priya Raghavan', prompt: 'A professional headshot of an Indian-Australian woman in her forties against a plain light office wall.', ar: '1:1' },
-  { id: 'team-2', alt: 'Portrait of Daniel Okafor', prompt: 'A professional headshot of a Black Australian man in his thirties in a shirt, plain light office background.', ar: '1:1' },
-  { id: 'team-3', alt: 'Portrait of Meera Shah', prompt: 'A professional headshot of an Indian woman in her thirties in a plain office in Chennai, natural window light.', ar: '1:1' },
-  { id: 'team-4', alt: 'Portrait of Tom Brennan', prompt: 'A professional headshot of a white Australian man in his fifties, open-collar shirt, plain light office background.', ar: '1:1' },
 
   // ── Hospital profile gallery (3) ──
   { id: 'hp-exterior', alt: 'Hospital exterior and entrance', prompt: 'The main entrance canopy of a large Indian cardiac hospital, covered drop-off, glass doors, planted beds, daylight.', ar: '16:9' },
   { id: 'hp-theatre', alt: 'Cardiac operating theatre', prompt: 'A cardiac operating theatre in an Indian hospital, perfusion equipment and overhead lights, spotless and prepared between cases.', ar: '16:9' },
   { id: 'hp-room', alt: 'International patient wing single room', prompt: 'A single patient room in an international patient wing of an Indian hospital, hotel-like finish, armchair for a companion, large window.', ar: '16:9' },
 
-  // ── One-offs (2) ──
+  // ── One-offs (1) ──
   { id: 'knee-hero', alt: 'Orthopaedic surgical suite', prompt: 'An orthopaedic surgical suite in an Indian hospital prepared for a knee replacement, navigation screen and instrument trays, bright and clinical.', ar: '16:9' },
-  { id: 'about-office', alt: 'The team at work in the office', prompt: 'A small friendly office team of four working around a shared desk in a bright Sydney office, laptops and paperwork, candid mid-conversation.', ar: '4:3' },
 ]
 
 export const IMAGE_BY_ID = Object.fromEntries(IMAGES.map((i) => [i.id, i]))

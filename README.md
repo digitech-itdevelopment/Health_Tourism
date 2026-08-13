@@ -21,7 +21,7 @@ npm run preview  # serve the built output
 | Path | What |
 |---|---|
 | `src/data/site.ts` | Every piece of copy and static data. Change content here, not in components. |
-| `src/data/images.ts` | The 39 photo slots: id, alt text, and the generation prompt for each. |
+| `src/data/images.ts` | The 34 photo slots: id, alt text, and the generation prompt for each. |
 | `src/assets/images/` | Photos. A file named `<id>.png` is picked up automatically. |
 | `src/components/` | Shared chrome — header, footer, logo, image slot, small UI primitives. |
 | `src/sections/` | Home-page sections that carry behaviour (hero, carousel, FAQ, form). |
@@ -32,7 +32,7 @@ npm run preview  # serve the built output
 ## Routes
 
 `/` · `/hospitals` · `/hospitals/:slug` · `/treatments/knee-replacement` ·
-`/why-india` · `/your-journey` · `/about`
+`/why-india` · `/your-journey`
 
 ## Images
 

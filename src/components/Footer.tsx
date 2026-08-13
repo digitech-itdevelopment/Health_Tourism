@@ -8,7 +8,6 @@ const EXPLORE = [
   { to: '/treatments/knee-replacement', label: 'Treatments' },
   { to: '/why-india', label: 'Why India' },
   { to: '/your-journey', label: 'Your journey' },
-  { to: '/about', label: 'About us' },
 ]
 
 export default function Footer() {
