@@ -1,4 +1,4 @@
-# Arogya Bridge
+# Health Tourism
 
 Marketing and directory site for a medical travel facilitation service connecting
 Australian patients with partner hospitals in India.
@@ -49,9 +49,9 @@ grok --prompt-file <batch>.txt --cwd . --always-approve
 
 ## Things worth knowing
 
-- **Brand name** is one constant (`BRAND` in `src/data/site.ts`). The source prototype
-  was inconsistent — mostly "Health Tourism", but "Arogya Bridge" in the consent copy
-  and in the design project name. Arogya Bridge won.
+- **Brand name** is one constant (`BRAND` in `src/data/site.ts`), split into two parts
+  because the wordmark renders the first bold and the second lighter. Change it there
+  and it updates the logo, the footer, the consent copy and the legal disclaimer.
 - **The hero is not a video.** It is an SVG + CSS motion-path loop (`FlightMap.tsx`):
   Sydney → India, the six partner cities light up, hub links fan out, then the flight
   home. One 20s cycle, seamless by construction, ~8 KB, sharp at any size, no decode.

@@ -2,9 +2,9 @@
 // Copy is bound by the handoff's Content Rules: no accreditation claims, indicative
 // AUD ranges only, everything labelled placeholder. Read those rules before editing.
 
-// The prototype disagrees with itself on the name (3× "Health Tourism", 1× "Arogya
-// Bridge" in the consent line). The design project is named Arogya Bridge, so that wins.
-export const BRAND = { first: 'Arogya', second: ' Bridge' } as const
+// The wordmark renders `first` bold and `second` lighter, so the name is split here
+// rather than stored whole.
+export const BRAND = { first: 'Health', second: ' Tourism' } as const
 export const BRAND_NAME = BRAND.first + BRAND.second
 
 export const TAGLINE = 'World-class care. Half a world closer than you think.'
@@ -222,7 +222,7 @@ export const AMBASSADOR = {
     'Member, Medical Travel Facilitator association (placeholder credential)',
     'Fluent in English, Hindi, Tamil and Malayalam',
   ],
-  contact: 'priya@arogyabridge.example · +61 2 8000 0000 · Mon–Fri 9:00–17:30 AEST',
+  contact: 'priya@healthtourism.example · +61 2 8000 0000 · Mon–Fri 9:00–17:30 AEST',
 }
 
 export const FAQS = [
@@ -438,7 +438,7 @@ export const FOOTER_DISCLAIMER = `${BRAND_NAME} is a medical travel facilitation
 export const CONTACT = {
   address: ['Level 8, 100 Placeholder St', 'Sydney NSW 2000'],
   phone: '+61 2 8000 0000',
-  email: 'hello@arogyabridge.example',
+  email: 'hello@healthtourism.example',
   hours: 'Mon–Fri 9:00–17:30 AEST',
 }
 
