@@ -9,12 +9,12 @@
 // is the intent. If real geography ever matters, swap the two <path d> for TopoJSON outlines.
 
 const INDIA_CITIES = [
-  { name: 'Delhi NCR', x: 316, y: 176 },
-  { name: 'Mumbai', x: 291, y: 286 },
-  { name: 'Pune', x: 301, y: 301 },
-  { name: 'Bengaluru', x: 336, y: 356 },
-  { name: 'Chennai', x: 366, y: 351 },
-  { name: 'Kochi', x: 335, y: 390 },
+  { name: 'Delhi NCR', x: 312, y: 178 },
+  { name: 'Mumbai', x: 292, y: 282 },
+  { name: 'Pune', x: 304, y: 298 },
+  { name: 'Bengaluru', x: 332, y: 352 },
+  { name: 'Chennai', x: 362, y: 344 },
+  { name: 'Kochi', x: 334, y: 382 },
 ]
 
 const AU_CITIES = [
@@ -23,9 +23,12 @@ const AU_CITIES = [
   { name: 'Sydney', x: 924, y: 516 },
 ]
 
+// Clockwise from Kashmir: Himalayan arc, north-east bulge, Bay of Bengal coast down
+// to Kanyakumari, back up the Konkan coast over the Gujarat/Kutch bulge to Punjab.
 const INDIA_PATH =
-  'M330 120 L372 132 L430 150 L468 174 L455 231 L421 264 L400 320 L372 366 L350 396 ' +
-  'L330 340 L315 330 L296 276 L272 250 L254 234 L240 214 L268 176 L305 140 Z'
+  'M298 124 L330 146 L368 140 L410 158 L438 170 L452 196 L468 186 L462 214 L438 222 ' +
+  'L430 250 L412 262 L416 288 L398 318 L380 348 L364 378 L352 402 L338 372 L326 340 ' +
+  'L312 300 L296 272 L280 250 L258 244 L246 226 L262 212 L256 192 L276 170 L288 146 Z'
 
 const AUSTRALIA_PATH =
   'M786 448 L800 420 L836 400 L860 414 L872 400 L890 396 L906 424 L930 450 L940 490 ' +
@@ -56,20 +59,21 @@ export default function FlightMap() {
       <rect width="1200" height="675" fill="url(#fm-grid)" />
       <ellipse cx="350" cy="270" rx="260" ry="230" fill="url(#fm-glow)" />
 
-      {/* Landmasses */}
-      <path d={INDIA_PATH} fill="#2EA184" fillOpacity="0.09" stroke="#2EA184" strokeWidth="1.5" strokeOpacity="0.5" />
-      <ellipse cx="370" cy="414" rx="11" ry="16" fill="#2EA184" fillOpacity="0.09" stroke="#2EA184" strokeWidth="1.5" strokeOpacity="0.5" />
-      <path d={AUSTRALIA_PATH} fill="#2EA184" fillOpacity="0.07" stroke="#2EA184" strokeWidth="1.5" strokeOpacity="0.38" />
-      <ellipse cx="914" cy="556" rx="10" ry="8" fill="#2EA184" fillOpacity="0.07" stroke="#2EA184" strokeWidth="1.5" strokeOpacity="0.38" />
+      {/* Landmasses. Opacities are tuned to sit under the hero scrim
+          (0.78 → 0.55 → 0.86) and still read — drop them and the map vanishes. */}
+      <path d={INDIA_PATH} fill="#2EA184" fillOpacity="0.16" stroke="#4FB79A" strokeWidth="1.75" strokeOpacity="0.8" />
+      <ellipse cx="370" cy="414" rx="11" ry="16" fill="#2EA184" fillOpacity="0.16" stroke="#4FB79A" strokeWidth="1.75" strokeOpacity="0.8" />
+      <path d={AUSTRALIA_PATH} fill="#2EA184" fillOpacity="0.12" stroke="#4FB79A" strokeWidth="1.75" strokeOpacity="0.62" />
+      <ellipse cx="914" cy="556" rx="10" ry="8" fill="#2EA184" fillOpacity="0.12" stroke="#4FB79A" strokeWidth="1.75" strokeOpacity="0.62" />
 
       {/* Route: faint always, bright segment drawn on the outbound leg */}
-      <path d={ROUTE} fill="none" stroke="#2EA184" strokeWidth="1.25" strokeOpacity="0.22" strokeDasharray="5 7" />
+      <path d={ROUTE} fill="none" stroke="#4FB79A" strokeWidth="1.5" strokeOpacity="0.4" strokeDasharray="5 7" />
       <path
         d={ROUTE}
         pathLength={1}
         fill="none"
-        stroke="#4FB79A"
-        strokeWidth="1.75"
+        stroke="#7FD8BE"
+        strokeWidth="2.25"
         strokeLinecap="round"
         strokeDasharray="1"
         className="fm-trail"
