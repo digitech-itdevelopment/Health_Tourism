@@ -33,8 +33,29 @@ export const ROUTES = [
   }
 ]
 
-/** Arrival hub out to the other partner cities. */
-export const NETWORK_PATH = 'M391.3 143.5L363.9 203.7M391.3 143.5L370.1 207.3M391.3 143.5L393.7 242.3M391.3 143.5L410.6 241.6M391.3 143.5L385.4 261.5'
+/** Arrival hub out to each other partner city, one entry per destination. */
+export const NETWORK_LINKS = [
+  {
+    "to": "Mumbai",
+    "path": "M391.3 143.5L363.9 203.7"
+  },
+  {
+    "to": "Pune",
+    "path": "M391.3 143.5L370.1 207.3"
+  },
+  {
+    "to": "Bengaluru",
+    "path": "M391.3 143.5L393.7 242.3"
+  },
+  {
+    "to": "Chennai",
+    "path": "M391.3 143.5L410.6 241.6"
+  },
+  {
+    "to": "Kochi",
+    "path": "M391.3 143.5L385.4 261.5"
+  }
+]
 
 export const INDIA_CITIES = [
   {

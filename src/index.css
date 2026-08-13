@@ -312,21 +312,24 @@
   }
 }
 
-/* Hub-to-city legs draw in on arrival and retract before the flight home. */
+/* A single hub-to-city leg. Each instance carries its own animation-delay, so the five
+   draw in sequence rather than together. The draw is fast (6% of the leg, under a
+   second) to leave room for the stagger inside the dwell. */
 @keyframes fm-network {
   0%,
-  42% {
+  40% {
     stroke-dashoffset: 1;
     opacity: 0;
   }
-  50% {
-    opacity: 0.55;
+  41% {
+    opacity: 0.6;
   }
-  56% {
+  46%,
+  58% {
     stroke-dashoffset: 0;
-    opacity: 0.55;
+    opacity: 0.6;
   }
-  64%,
+  62%,
   100% {
     stroke-dashoffset: 0;
     opacity: 0;

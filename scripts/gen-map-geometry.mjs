@@ -117,15 +117,16 @@ const ORIGINS = [
 
 // Onward legs from the arrival hub to the other partner cities. Straight in projected
 // space: at a few hundred km these are visually indistinguishable from great circles.
+// Emitted one per city rather than as a single path, so each can draw on its own delay
+// in step with that city's ping.
 const network = () => {
   const [hx, hy] = projection(DELHI)
   return CITIES.india
     .filter((c) => c.partner && c.name !== 'Delhi NCR')
     .map((c) => {
       const [x, y] = projection([c.lon, c.lat])
-      return `M${hx.toFixed(1)} ${hy.toFixed(1)}L${x.toFixed(1)} ${y.toFixed(1)}`
+      return { to: c.name, path: `M${hx.toFixed(1)} ${hy.toFixed(1)}L${x.toFixed(1)} ${y.toFixed(1)}` }
     })
-    .join('')
 }
 
 const routes = () =>
@@ -152,8 +153,8 @@ export const GRATICULE_PATH = '${graticule()}'
 /** One great circle per departure city, flown in turn. Distances are km. */
 export const ROUTES = ${JSON.stringify(routes(), null, 2)}
 
-/** Arrival hub out to the other partner cities. */
-export const NETWORK_PATH = '${network()}'
+/** Arrival hub out to each other partner city, one entry per destination. */
+export const NETWORK_LINKS = ${JSON.stringify(network(), null, 2)}
 
 export const INDIA_CITIES = ${JSON.stringify(CITIES.india.map(project), null, 2)}
 
@@ -166,4 +167,5 @@ const kb = (s) => (Buffer.byteLength(s) / 1024).toFixed(1)
 console.log(`india      ${kb(round(path(india)))} KB`)
 console.log(`australia  ${kb(round(path(australia)))} KB`)
 console.log(`graticule  ${kb(graticule())} KB`)
+console.log(`routes     ${routes().length}, network links ${network().length}`)
 console.log(`total file ${kb(out)} KB`)

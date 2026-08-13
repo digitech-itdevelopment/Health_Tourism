@@ -4,7 +4,7 @@ import {
   GRATICULE_PATH,
   INDIA_CITIES,
   INDIA_PATH,
-  NETWORK_PATH,
+  NETWORK_LINKS,
   ROUTES,
   SRI_LANKA_PATH,
   VIEW_BOX,
@@ -28,6 +28,12 @@ const label = (city: { x: number; y: number; side: string; dy: number }) =>
   city.side === 'right'
     ? { x: city.x + 10, y: city.y + 3.5 + city.dy, anchor: 'start' as const }
     : { x: city.x - 10, y: city.y + 3.5 + city.dy, anchor: 'end' as const }
+
+// Cities light up north to south. Each hub link shares its destination's delay, so the
+// line reaches a city exactly as that city pings. Kept short so the whole sequence
+// finishes inside the 3.5s the aircraft is on the ground.
+const STAGGER = 0.22
+const cityDelay = (name: string) => INDIA_CITIES.findIndex((c) => c.name === name) * STAGGER
 
 export default function FlightMap() {
   return (
@@ -67,17 +73,22 @@ export default function FlightMap() {
         <path d={AUSTRALIA_PATH} fill="#2EA184" fillOpacity="0.15" strokeWidth="1.7" strokeOpacity="0.75" />
       </g>
 
-      {/* Onward legs from the arrival hub. Partner cities only — the map never implies
-          a facility we do not list. */}
-      <path
-        d={NETWORK_PATH}
-        pathLength={1}
-        fill="none"
-        stroke="#7FD8BE"
-        strokeWidth="0.9"
-        strokeDasharray="1"
-        className="fm-network"
-      />
+      {/* Onward legs from the arrival hub, drawing one at a time in step with the city
+          pings. Partner cities only — the map never implies a facility we do not list. */}
+      {NETWORK_LINKS.map((l) => (
+        <path
+          key={l.to}
+          d={l.path}
+          pathLength={1}
+          fill="none"
+          stroke="#7FD8BE"
+          strokeWidth="0.9"
+          strokeLinecap="round"
+          strokeDasharray="1"
+          className="fm-network"
+          style={{ animationDelay: `${cityDelay(l.to)}s` }}
+        />
+      ))}
 
       {/* All three routes sit faint the whole time, so the map reads as a network even
           between flights. Only the leg being flown gets the bright overlay. */}
@@ -132,7 +143,7 @@ export default function FlightMap() {
       {INDIA_CITIES.map((c, i) => {
         const l = label(c)
         return (
-          <g key={c.name} className="fm-city" style={{ animationDelay: `${i * 0.35}s` }}>
+          <g key={c.name} className="fm-city" style={{ animationDelay: `${i * STAGGER}s` }}>
             <circle cx={c.x} cy={c.y} r="12" fill="none" stroke="#4FB79A" strokeWidth="1.1" className="fm-ring" />
             <circle cx={c.x} cy={c.y} r="3" fill="#7FD8BE" />
             <text
