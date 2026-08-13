@@ -6,28 +6,111 @@
 //
 // Usage: node scripts/gen-map-geometry.mjs
 
-import { readFileSync, writeFileSync } from 'node:fs'
-import { geoDistance, geoEquirectangular, geoInterpolate, geoPath } from 'd3-geo'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { geoArea, geoContains, geoDistance, geoEquirectangular, geoInterpolate, geoPath } from 'd3-geo'
+import { topology } from 'topojson-server'
+import { presimplify, simplify } from 'topojson-simplify'
 import { feature } from 'topojson-client'
+import { read } from 'shapefile'
+import AdmZip from 'adm-zip'
 
 const W = 1200
 const H = 675
 
-// 50m, not 110m. India renders ~250px tall and is the subject of the whole graphic, and
-// at 110m its coastline visibly facets into straight segments — the Konkan coast and the
-// southern tip especially. The extra ~45 KB of path data is nothing beside the 1.3 MB of
-// photography this page already ships, and it gzips well.
-const topo = JSON.parse(readFileSync('node_modules/world-atlas/countries-50m.json', 'utf8'))
-const countries = feature(topo, topo.objects.countries)
+// Natural Earth's DEFAULT dataset draws India at the Line of Control: Gilgit and
+// Muzaffarabad are assigned to Pakistan and Aksai Chin to China, so the polygon stops at
+// 35.5N and the whole northern crown of Jammu & Kashmir is missing. On an Indian map that
+// silhouette is simply wrong, and depicting it that way is not acceptable for a site
+// aimed at Indian healthcare.
+//
+// Natural Earth publishes point-of-view editions for exactly this. `_ind` is the India
+// POV: same data, India's claim applied. It is only released at 1:10m, so the geometry is
+// far more detailed than we need and gets simplified below.
+const POV_URL = 'https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries_ind.zip'
+const CACHE = '.cache/naturalearth'
+
+async function loadCountries() {
+  mkdirSync(CACHE, { recursive: true })
+  const zipPath = `${CACHE}/ne_10m_admin_0_countries_ind.zip`
+
+  if (!existsSync(zipPath)) {
+    console.log('downloading India-POV boundaries from Natural Earth...')
+    const res = await fetch(POV_URL)
+    if (!res.ok) throw new Error(`download failed: ${res.status}`)
+    writeFileSync(zipPath, Buffer.from(await res.arrayBuffer()))
+  }
+
+  const zip = new AdmZip(zipPath)
+  const grab = (ext) => {
+    const entry = zip.getEntries().find((e) => e.entryName.endsWith(ext))
+    if (!entry) throw new Error(`missing ${ext} in archive`)
+    return entry.getData()
+  }
+  return read(grab('.shp'), grab('.dbf'))
+}
+
+const countries = await loadCountries()
+
+// dbf stores fixed-width strings NUL-padded, so "India" arrives as "India\0\0\0...".
+const clean = (v) => String(v ?? '').replace(/\0+$/, '').trim()
+
 const byName = (name) => {
-  const f = countries.features.find((c) => c.properties.name === name)
+  const f = countries.features.find(
+    (c) => clean(c.properties.NAME) === name || clean(c.properties.ADMIN) === name,
+  )
   if (!f) throw new Error(`Country not found: ${name}`)
   return f
 }
 
-const india = byName('India')
-const australia = byName('Australia')
-const sriLanka = byName('Sri Lanka')
+// 10m carries far more than a ~250px-tall background can show, in two different ways.
+//
+// First the ring count: India ships 35 separate polygons and Australia 94, nearly all of
+// them islets that render as a single stray pixel. Anything under `MIN_RING_SHARE` of the
+// country's largest ring is dropped, which keeps Tasmania and the Andamans and discards
+// the specks.
+//
+// Then the vertex count: India spans ~28 degrees of latitude across ~250px, so roughly
+// 9px per degree. Detail finer than about a tenth of a degree cannot be seen, and
+// `SIMPLIFY` is the triangle-area threshold that removes it. Together these bring the two
+// countries from 245 KB to about 30 KB with no visible change at render size.
+const MIN_RING_SHARE = 0.0005
+const SIMPLIFY = 2e-3
+
+const dropSpecks = (f) => {
+  if (f.geometry.type !== 'MultiPolygon') return f
+  const polys = f.geometry.coordinates
+  const areas = polys.map((p) => geoArea({ type: 'Polygon', coordinates: p }))
+  const biggest = Math.max(...areas)
+  return {
+    ...f,
+    geometry: {
+      type: 'MultiPolygon',
+      coordinates: polys.filter((_, i) => areas[i] >= biggest * MIN_RING_SHARE),
+    },
+  }
+}
+
+const thin = (features) => {
+  const fc = { type: 'FeatureCollection', features: features.map(dropSpecks) }
+  const topo = simplify(presimplify(topology({ f: fc })), SIMPLIFY)
+  return feature(topo, topo.objects.f).features
+}
+
+const [india, australia, sriLanka] = thin([byName('India'), byName('Australia'), byName('Sri Lanka')])
+
+// Prove the POV actually applied rather than trusting the filename. If Natural Earth ever
+// changes the edition, this fails loudly instead of silently shipping a cut J&K again.
+const CLAIMED = [
+  ['Gilgit', 74.31, 35.92],
+  ['Muzaffarabad', 73.47, 34.37],
+  ['Aksai Chin', 79.5, 35.0],
+]
+for (const [name, lon, lat] of CLAIMED) {
+  if (!geoContains(india, [lon, lat])) {
+    throw new Error(`India POV check failed: ${name} is outside the India polygon`)
+  }
+}
+console.log('POV check: Gilgit, Muzaffarabad and Aksai Chin all inside India')
 
 // Fit India + Australia together so their relative positions stay true to the globe:
 // the whole point of the route arc is that the distance is real.
@@ -39,8 +122,8 @@ const sriLanka = byName('Sri Lanka')
 // headline band and drops Sydney just below the search panel.
 const projection = geoEquirectangular().fitExtent(
   [
-    [104, 100],
-    [W - 96, 600],
+    [104, 60],
+    [W - 96, 560],
   ],
   { type: 'FeatureCollection', features: [india, australia] },
 )

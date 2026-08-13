@@ -69,7 +69,7 @@ export default function FlightMap() {
       <path d={GRATICULE_PATH} fill="none" stroke="#2EA184" strokeWidth="0.6" strokeOpacity="0.18" />
 
       {/* Bloom over India, timed to each arrival */}
-      <ellipse cx="385" cy="210" rx="225" ry="200" fill="url(#fm-bloom)" className="fm-bloom" />
+      <ellipse cx="390" cy="150" rx="225" ry="195" fill="url(#fm-bloom)" className="fm-bloom" />
 
       {/* Coastlines. The wide, low-opacity stroke underneath is a cheap glow — far
           lighter than an SVG filter, which would rasterise every frame. */}
