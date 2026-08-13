@@ -197,6 +197,9 @@
 }
 
 .fm-plane {
+  /* fill-box so `center` means the glyph's own centre, not the viewBox centre. */
+  transform-box: fill-box;
+  transform-origin: center;
   offset-anchor: center;
   animation: fm-fly 20s linear infinite;
 }
