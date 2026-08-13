@@ -25,10 +25,10 @@ export default function Hero() {
 
       <div className="pointer-events-none relative max-w-[900px] px-6 pt-[150px] pb-[90px] text-center">
         <p className="eyebrow mb-4.5 text-jade-light">India · For Australian patients</p>
-        <h1 className="mb-4.5 text-[clamp(34px,5.2vw,60px)] leading-[1.12] font-bold tracking-[-0.025em] text-balance text-white">
+        <h1 className="hero-title mb-4.5 text-[clamp(34px,5.2vw,60px)] leading-[1.12] font-bold tracking-[-0.025em] text-balance text-white">
           {TAGLINE}
         </h1>
-        <p className="mx-auto mb-9 max-w-[620px] text-[18px] leading-relaxed text-[#D8DCDF] text-pretty">
+        <p className="hero-sub mx-auto mb-9 max-w-[620px] text-[18px] leading-relaxed text-[#D8DCDF] text-pretty">
           Partner hospitals across India, coordinated end to end — from your first enquiry to follow-up once you are
           home in Australia.
         </p>

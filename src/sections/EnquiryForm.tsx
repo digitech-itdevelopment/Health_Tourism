@@ -15,7 +15,7 @@ export default function EnquiryForm() {
 
   return (
     <section id="enquire" className="border-t border-line bg-surface px-6 py-24">
-      <div className="mx-auto grid max-w-[1280px] gap-14 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+      <div className="shell grid gap-14 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
         <div className="reveal">
           <Eyebrow>Request a free quote</Eyebrow>
           <h2 className="mb-4.5 text-[clamp(28px,3.4vw,42px)] leading-[1.18] font-bold tracking-[-0.02em]">

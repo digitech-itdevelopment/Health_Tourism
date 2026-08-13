@@ -67,7 +67,7 @@ export default function WhyIndia() {
       </section>
 
       <section className="bg-tint px-6 py-20">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="shell">
           <div className="reveal mb-11 max-w-[680px]">
             <Eyebrow>Safety and standards</Eyebrow>
             <h2 className="mb-3.5 text-[clamp(26px,3.2vw,36px)] font-bold tracking-[-0.02em]">

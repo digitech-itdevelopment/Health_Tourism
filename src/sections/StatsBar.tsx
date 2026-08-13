@@ -8,7 +8,7 @@ export default function StatsBar() {
 
   return (
     <section aria-label="Accreditation and reach" className="border-b border-line bg-white">
-      <div className="mx-auto max-w-[1280px] px-6 py-8.5">
+      <div className="shell px-6 py-8.5">
         <p className="mx-auto max-w-[760px] text-center text-[15.5px] text-muted text-pretty">
           Every hospital listing sets out its own accreditations, staffing and equipment, and we ask for current
           documentation before a facility appears here.

@@ -15,7 +15,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-ink px-6 pt-18 pb-9 text-ondark">
-      <div className="mx-auto max-w-[1280px]">
+      <div className="shell">
         <div className="grid gap-10 border-b border-white/12 pb-11 [grid-template-columns:repeat(auto-fit,minmax(210px,1fr))]">
           <div>
             <div className="mb-4 text-white">

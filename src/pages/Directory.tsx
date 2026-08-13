@@ -23,7 +23,7 @@ export default function Directory() {
   return (
     <main className="pt-[78px]">
       <section className="bg-ink px-6 py-16">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="shell">
           <Eyebrow onDark>Hospital directory</Eyebrow>
           <h1 className="mb-3 text-[clamp(30px,4vw,46px)] leading-[1.15] font-bold tracking-[-0.02em] text-white">
             Partner hospitals across India
@@ -35,7 +35,7 @@ export default function Directory() {
       </section>
 
       <section className="sticky top-[66px] z-40 border-b border-line bg-white">
-        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center gap-3 px-6 py-4.5">
+        <div className="shell flex flex-wrap items-center gap-3 px-6 py-4.5">
           <label className="flex flex-col gap-1.25 text-xs font-semibold text-muted">
             City
             <select value={city} onChange={(e) => setCity(e.target.value)} className={`${FILTER} min-w-[160px]`}>
@@ -72,7 +72,7 @@ export default function Directory() {
 
       <section className="bg-surface px-6 pt-12 pb-24">
         <div
-          className="mx-auto grid max-w-[1280px] gap-5"
+          className="shell grid gap-5"
           style={{ gridTemplateColumns: view === 'grid' ? 'repeat(auto-fill,minmax(300px,1fr))' : '1fr' }}
         >
           {filtered.map((h) => (

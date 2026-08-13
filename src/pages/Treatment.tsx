@@ -7,7 +7,7 @@ export default function Treatment() {
   return (
     <main className="pt-[78px]">
       <section className="bg-tint px-6 py-16">
-        <div className="mx-auto grid max-w-[1280px] items-center gap-12 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+        <div className="shell grid items-center gap-12 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
           <div>
             <Eyebrow>{KNEE.eyebrow}</Eyebrow>
             <h1 className="mb-4 text-[clamp(30px,4vw,46px)] leading-[1.15] font-bold tracking-[-0.02em]">
@@ -31,7 +31,7 @@ export default function Treatment() {
       </section>
 
       <section className="bg-white px-6 pt-18 pb-24">
-        <div className="mx-auto grid max-w-[1280px] items-start gap-14 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+        <div className="shell grid items-start gap-14 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
           <div>
             <h2 className="mb-3.5 text-[26px] font-bold tracking-[-0.02em]">What the procedure involves</h2>
             <p className="mb-4.5 text-[17px] text-body-soft text-pretty">{KNEE.about1}</p>

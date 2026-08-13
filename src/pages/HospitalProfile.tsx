@@ -20,7 +20,7 @@ export default function HospitalProfile() {
   return (
     <main className="pt-[78px]">
       <section className="bg-ink px-6 pt-14 pb-16">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="shell">
           <Link to="/hospitals" className="text-sm text-ondark-soft hover:text-white">
             ← All hospitals
           </Link>
@@ -35,7 +35,7 @@ export default function HospitalProfile() {
       </section>
 
       <section className="bg-white px-6">
-        <div className="mx-auto grid max-w-[1280px] -translate-y-8 gap-3.5 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
+        <div className="shell grid -translate-y-8 gap-3.5 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
           {detail.gallery.map((g) => (
             <div key={g.id} className="relative h-[200px] overflow-hidden rounded-[14px] border border-line bg-tint">
               <ImageSlot id={g.id} alt={g.alt} />
@@ -45,7 +45,7 @@ export default function HospitalProfile() {
       </section>
 
       <section className="bg-white px-6 pt-6 pb-24">
-        <div className="mx-auto grid max-w-[1280px] items-start gap-14 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+        <div className="shell grid items-start gap-14 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
           <div>
             <h2 className="mb-3.5 text-[26px] font-bold tracking-[-0.02em]">About the facility</h2>
             <p className="mb-4.5 text-[17px] text-body-soft text-pretty">{detail.about1}</p>

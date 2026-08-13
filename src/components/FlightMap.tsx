@@ -9,6 +9,7 @@ import {
   SRI_LANKA_PATH,
   VIEW_BOX,
 } from './flight-map.geo'
+import { useMediaQuery } from '../lib/motion'
 
 // Hero background: three inbound flights in turn — Sydney, then Melbourne, then Perth —
 // each landing in Delhi, lighting the partner cities, and flying home.
@@ -35,11 +36,20 @@ const label = (city: { x: number; y: number; side: string; dy: number }) =>
 const STAGGER = 0.22
 const cityDelay = (name: string) => INDIA_CITIES.findIndex((c) => c.name === name) * STAGGER
 
+// Above this the hero is wide enough that `slice` crops only a little off the top and
+// bottom, which fills the frame and looks best. Below it, slice starts scaling the map
+// past the viewport width and cutting India's western edge off — so narrow screens get
+// `meet` and see the whole map instead. The letterbox is invisible: the hero behind it
+// is the same ink as the map's own background rect.
+const WIDE = '(min-width: 820px)'
+
 export default function FlightMap() {
+  const wide = useMediaQuery(WIDE)
+
   return (
     <svg
       viewBox={VIEW_BOX}
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio={wide ? 'xMidYMid slice' : 'xMidYMid meet'}
       aria-hidden="true"
       className="absolute inset-0 h-full w-full"
     >
@@ -132,6 +142,7 @@ export default function FlightMap() {
               fontSize="10"
               fontFamily="ui-monospace, monospace"
               letterSpacing="0.12em"
+              className="fm-label"
             >
               {c.name.toUpperCase()}
             </text>
@@ -154,6 +165,7 @@ export default function FlightMap() {
               fontSize="10.5"
               fontFamily="ui-monospace, monospace"
               letterSpacing="0.12em"
+              className="fm-label"
             >
               {c.name.toUpperCase()}
             </text>
@@ -178,10 +190,18 @@ export default function FlightMap() {
       ))}
 
       {/* Leg readout, bottom left. Direction-neutral because it stays up for the whole
-          leg, including the flight home. */}
-      <g fontFamily="ui-monospace, monospace" letterSpacing="0.16em" fontSize="11.5" fill="#7FD8BE">
+          leg, including the flight home. Kept at y=598 rather than nearer the edge: on a
+          very wide viewport `slice` crops ~130 units off the top and bottom, and anything
+          below ~610 gets cut. */}
+      <g
+        fontFamily="ui-monospace, monospace"
+        letterSpacing="0.16em"
+        fontSize="11.5"
+        fill="#7FD8BE"
+        className="fm-label"
+      >
         {ROUTES.map((r, i) => (
-          <text key={`leg-${r.code}`} x="62" y="640" className={`fm-leg fm-band-${i + 1}`}>
+          <text key={`leg-${r.code}`} x="62" y="598" className={`fm-leg fm-band-${i + 1}`}>
             {r.code} – DEL · {r.km.toLocaleString('en-AU')} KM · NONSTOP
           </text>
         ))}

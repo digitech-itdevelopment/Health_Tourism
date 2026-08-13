@@ -18,7 +18,7 @@ export default function HospitalCarousel() {
 
   return (
     <section aria-label="Partner hospitals" className="bg-tint px-6 py-24">
-      <div className="mx-auto max-w-[1280px]">
+      <div className="shell">
         <div className="reveal mb-10 max-w-[600px]">
           <Eyebrow>Our partner hospitals</Eyebrow>
           <h2 className="mb-3 text-[clamp(28px,3.4vw,42px)] leading-[1.18] font-bold tracking-[-0.02em]">

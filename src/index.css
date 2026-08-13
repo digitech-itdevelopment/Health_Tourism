@@ -81,6 +81,17 @@
 }
 
 @layer components {
+  /* The one content container. The handoff specifies 1280px, which is right for line
+     length at laptop and desktop sizes, but leaves a 2560px screen with 640px of dead
+     margin each side — so it grows on very large displays rather than stranding the
+     layout in the middle. Section padding stays on the section so backgrounds stay
+     full-bleed. */
+  .shell {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+
   /* Jade chevron for every <select>. Lives here rather than in a Tailwind arbitrary
      value: the data URI needs both quote styles, which the class-name escaper mangles
      into an invalid url() token. */
@@ -106,6 +117,41 @@
   .reveal.is-in {
     opacity: 1;
     transform: none;
+  }
+}
+
+@media (min-width: 1920px) {
+  .shell {
+    max-width: 1440px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .shell {
+    max-width: 1680px;
+  }
+}
+
+/* The hero type caps at 60px, which reads as tiny once the viewport is this wide. Most
+   4K displays run at 150-200% OS scaling so the CSS viewport is really 1920-2560, but on
+   the ones that don't, let the headline keep growing. */
+@media (min-width: 2200px) {
+  .hero-title {
+    font-size: clamp(60px, 3.2vw, 88px) !important;
+  }
+
+  .hero-sub {
+    font-size: 21px !important;
+  }
+}
+
+/* City labels are sized in viewBox units, so once the map switches to fit-the-whole-
+   thing at 820px they scale down with it and land under 7px. Below that breakpoint the
+   map keeps its dots, routes and pings but drops the type it can no longer render
+   legibly. Matches WIDE in FlightMap.tsx. */
+@media (max-width: 819.98px) {
+  .fm-label {
+    display: none;
   }
 }
 

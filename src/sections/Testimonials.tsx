@@ -13,7 +13,7 @@ export default function Testimonials() {
 
   return (
     <section aria-label="Patient stories" className="border-t border-line bg-white px-6 py-24">
-      <div className="mx-auto max-w-[1280px]">
+      <div className="shell">
         <div className="reveal mb-10 flex flex-wrap items-end justify-between gap-5">
           <div className="max-w-[560px]">
             <Eyebrow>Patient stories</Eyebrow>

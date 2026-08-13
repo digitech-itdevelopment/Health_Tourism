@@ -21,7 +21,7 @@ export default function Home() {
 
       {/* Why India, why now */}
       <section id="why" className="bg-surface px-6 py-24">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="shell">
           <div className="reveal mb-12 max-w-[660px]">
             <Eyebrow>Why India, why now</Eyebrow>
             <h2 className="mb-4 text-[clamp(28px,3.4vw,42px)] leading-[1.18] font-bold tracking-[-0.02em]">
@@ -55,7 +55,7 @@ export default function Home() {
 
       {/* Browse by specialty */}
       <section aria-label="Browse by specialty" className="border-t border-line bg-white px-6 py-24">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="shell">
           <div className="reveal mb-11 flex flex-wrap items-end justify-between gap-5">
             <div className="max-w-[560px]">
               <Eyebrow>Browse by specialty</Eyebrow>
@@ -100,7 +100,7 @@ export default function Home() {
 
       {/* Medical infrastructure */}
       <section aria-label="Medical infrastructure" className="overflow-hidden bg-white px-6 py-24">
-        <div className="mx-auto grid max-w-[1280px] items-center gap-14 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
+        <div className="shell grid items-center gap-14 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
           <div ref={infraParallax} className="relative">
             <div className="relative h-[380px] overflow-hidden rounded-2xl bg-tint shadow-media">
               <ImageSlot id="infra-theatre" />
@@ -135,7 +135,7 @@ export default function Home() {
 
       {/* Your journey */}
       <section id="journey" className="bg-ink px-6 py-24">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="shell">
           <div className="reveal mb-14 max-w-[640px]">
             <Eyebrow onDark>Your journey</Eyebrow>
             <h2 className="mb-3.5 text-[clamp(28px,3.4vw,42px)] leading-[1.18] font-bold tracking-[-0.02em] text-white">
@@ -161,7 +161,7 @@ export default function Home() {
 
       {/* Recovery stays */}
       <section aria-label="Recover and explore India" className="bg-surface px-6 py-24">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="shell">
           <div className="reveal mb-11 max-w-[620px]">
             <Eyebrow>Recovery stays</Eyebrow>
             <h2 className="mb-3.5 text-[clamp(28px,3.4vw,42px)] leading-[1.18] font-bold tracking-[-0.02em]">
@@ -205,7 +205,7 @@ export default function Home() {
 
       {/* Meet your ambassador */}
       <section id="about" className="bg-tint px-6 py-24">
-        <div className="mx-auto grid max-w-[1280px] items-center gap-14 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+        <div className="shell grid items-center gap-14 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
           <div className="reveal relative h-[440px] overflow-hidden rounded-2xl bg-[#E6E9EA] shadow-media">
             <ImageSlot id="ambassador" />
           </div>

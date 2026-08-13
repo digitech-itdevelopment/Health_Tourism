@@ -21,7 +21,7 @@ export function PageHeader({
 }) {
   return (
     <section className="bg-ink px-6 py-16">
-      <div className="mx-auto max-w-[1280px]">
+      <div className="shell">
         <Eyebrow onDark>{eyebrow}</Eyebrow>
         <h1 className="mb-3.5 max-w-[820px] text-[clamp(30px,4vw,46px)] leading-[1.15] font-bold tracking-[-0.02em] text-white">
           {title}
